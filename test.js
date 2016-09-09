@@ -69,7 +69,7 @@ describe("bit-docs-tag-demo", function(){
 		generate(docMap, {
 			html: {
 				dependencies: {
-					"bit-docs-prettify": "^0.0.3",
+					"bit-docs-prettify": "^0.1.0",
 					"bit-docs-html-highlight-line": __dirname
 				}
 			},

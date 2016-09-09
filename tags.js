@@ -1,4 +1,4 @@
-exports.demo = {
+exports.highlight = {
     add: function(line, curData) {
         var lines = line.replace("@highlight","").trim();
         var html = "<span line-highlight='"+lines+"'></span>";

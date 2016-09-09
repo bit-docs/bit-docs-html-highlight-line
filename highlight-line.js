@@ -73,4 +73,4 @@ function addHighlights() {
 	});
 }
 
-addHighlights();
+module.exports = addHighlights;
