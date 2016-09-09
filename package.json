@@ -1,0 +1,36 @@
+{
+  "name": "bit-docs-html-highlight-line",
+  "version": "0.0.1",
+  "description": "Highlight a line in source code",
+  "main": "highlight-line.js",
+  "scripts": {
+    "preversion": "npm test",
+    "test": "mocha test.js --reporter spec",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bit-docs/bit-docs-html-highlight-line.git"
+  },
+  "keywords": [
+    "bit-docs",
+    "donejs"
+  ],
+  "author": "Bitovi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bit-docs/bit-docs-html-highlight-line/issues"
+  },
+  "homepage": "https://github.com/bit-docs/bit-docs-html-highlight-line#readme",
+  "dependencies": {
+    "jquery": "^2.2.4"
+  },
+  "devDependencies": {
+    "bit-docs-generate-html": "^0.0.3",
+    "connect": "^2.14.4",
+    "mocha": "^2.5.3",
+    "zombie": "^4.2.1"
+  }
+}
