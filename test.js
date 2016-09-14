@@ -1,6 +1,7 @@
 var assert = require("assert");
 var generate = require("bit-docs-generate-html/generate");
 var path = require("path");
+var fs = require("fs");
 
 var Browser = require("zombie"),
 	connect = require("connect");
@@ -56,13 +57,7 @@ describe("bit-docs-tag-demo", function(){
 			index: {
 				name: "index",
 				demo: "path/to/demo.html",
-				body: ("```"+`
-				        var a = "bar";
-						var b = "bar";
-						var c = "bar";
-						var d = "bar";\n`+
-					 "```\n"+
-					 "<span line-highlight='1-2'></span>").replace(/\n\s+/g,"\n")
+				body: ""+fs.readFileSync(__dirname+"/test-demo.md")
 			}
 		});
 

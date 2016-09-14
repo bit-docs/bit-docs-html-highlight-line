@@ -20,6 +20,8 @@ var getLines = function(lineString) {
 			//matches one or more digits
 		} else if (/^[\d]+$/.test(val)) {
 			result[val - 1] = true;
+		} else {
+			result[val] = true;
 		}
 
 	}
@@ -61,15 +63,61 @@ function addHighlights() {
 		});
 
 		codeBlock.empty();
+		if(lines.only) {
+			var segments = [];
+			lineMap.forEach(function(lineNodes, lineNumber){
+				var visible = lines[lineNumber];
+				var lineNode = document.createElement('span');
+				$(lineNode).append(lineNodes);
+				lineNode.className = lines[lineNumber] ? 'line highlight': 'line' ;
 
-		for (var key in lineMap) {
-			if (lineMap.hasOwnProperty(key)) {
-                var newNode = document.createElement('span');
-                 newNode.className = lines[key] ? 'line highlight': 'line' ;
-                 $(newNode).append(lineMap[key]);
-                 codeBlock.append(newNode);
-			}
+				var lastSegment = segments[segments.length - 1];
+				if(!lastSegment || lastSegment.visible !== visible) {
+					segments.push(lastSegment = {visible: visible, lines: []});
+				}
+				lastSegment.lines.push(lineNode);
+
+
+			});
+			segments.forEach(function(segment, index){
+				var next = segments[index+1];
+
+				if(segment.visible) {
+					// take 3 lines from next if possible
+					if(next) {
+						var first = next.lines.splice(0,3);
+						segment.lines = segment.lines.concat(first);
+					}
+					codeBlock.append(segment.lines);
+				} else {
+					// move 3 lines to next if possible
+					if(next) {
+						var last = segment.lines.splice(segment.lines.length-3);
+						next.lines = last.concat(next.lines);
+					}
+					if(segment.lines.length > 2) {
+						var expander = document.createElement('div');
+						expander.className = "expand";
+						expander.addEventListener("click", function(){
+							$(expander).replaceWith(segment.lines);
+						});
+						codeBlock.append(expander);
+					} else {
+						codeBlock.append(segment.lines);
+					}
+				}
+			});
+
+
+		} else {
+			lineMap.forEach(function(lineNodes, lineNumber){
+				var newNode = document.createElement('span');
+				newNode.className = lines[lineNumber] ? 'line highlight': 'line' ;
+				$(newNode).append(lineNodes);
+				codeBlock.append(newNode);
+			});
 		}
+
 	});
 }
 
