@@ -69,7 +69,7 @@ function addHighlights() {
 				var visible = lines[lineNumber];
 				var lineNode = document.createElement('span');
 				$(lineNode).append(lineNodes);
-				lineNode.className = lines[lineNumber] ? 'line highlight': 'line' ;
+				lineNode.className = lines[lineNumber] ? 'line highlight line-'+lineNumber: 'line line-'+lineNumber ;
 
 				var lastSegment = segments[segments.length - 1];
 				if(!lastSegment || lastSegment.visible !== visible) {
