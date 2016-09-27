@@ -34,6 +34,7 @@ function addHighlights() {
 		var $el = $(el);
 		var lines = getLines($el.attr('line-highlight'));
 		var codeBlock = $el.parent().prev('pre').children('code');
+		codeBlock.addClass("line-highlight");
 
 		var lineMap = [[]];
 		var k = 0;

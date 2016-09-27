@@ -84,7 +84,8 @@ describe("bit-docs-tag-demo", function(){
 					// NOTE: there should be 2 lines.  But it seems
 					// like prettify doesn't work in zombie right.
 					assert.ok(highlights.length,  "there are 2 tabs");
-
+					var codeBlocks = doc.getElementsByClassName("line-highlight");
+					assert.ok(codeBlocks.length, "there are code blocks with highlight class");
 					close();
 					done();
 				}, done);
