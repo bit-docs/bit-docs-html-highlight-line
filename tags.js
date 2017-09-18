@@ -1,6 +1,6 @@
 /**
  * @parent bit-docs-html-highlight-line/tags
- * @module {bit-docs/types/tag} bit-docs-html-highlight-line/tags/highlight @highlight
+ * @module {bit-docs-process-tags/types/tag} bit-docs-html-highlight-line/tags/highlight @highlight
  * 
  * Highlight the specified code lines.
  * 
