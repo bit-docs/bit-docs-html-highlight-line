@@ -28,6 +28,25 @@ var getLines = function(lineString) {
 	return result;
 };
 
+/**
+ * @parent bit-docs-html-highlight-line/static
+ * @module {function} bit-docs-html-highlight-line/highlight-line.js
+ * 
+ * Main front end JavaScript file for static portion of this plugin.
+ * 
+ * @signature `addHighlights()`
+ * 
+ * Goes through the lines in a `<code>` block and highlights the specified
+ * ranges. 
+ * 
+ * Finds all `<span highlight-line="..."></span>` elements and uses those as
+ * directives for what to highlight.
+ * 
+ * If the `only` option was specified to the
+ * [bit-docs-html-highlight-line/tags/highlight] tag, then non-highlighted
+ * lines will be collapsed if they exist greater than three lines away from a
+ * highlighted line.
+ */
 function addHighlights() {
 
 	$('span[line-highlight]').each(function(i, el) {
