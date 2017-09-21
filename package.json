@@ -2,7 +2,7 @@
   "name": "bit-docs-html-highlight-line",
   "version": "0.2.3",
   "description": "Highlight a line in source code",
-  "main": "highlight-line.js",
+  "main": "index.js",
   "scripts": {
     "preversion": "npm test",
     "test": "mocha test.js --reporter spec",

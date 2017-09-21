@@ -1,3 +1,4 @@
+require("./static/styles/highlight-line.less");
 var $ = require("jquery");
 
 var getLines = function(lineString) {
