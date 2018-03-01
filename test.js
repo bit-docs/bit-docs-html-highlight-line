@@ -7,7 +7,7 @@ var Browser = require("zombie");
 var connect = require("connect");
 
 var open = function(url, callback, done) {
-	var server = connect().use(connect.static(path.join(__dirname))).listen(8081);
+	var server = connect().use(connect.static(path.join(__dirname, "temp"))).listen(8081);
 	var browser = new Browser();
 	browser.visit("http://localhost:8081/" + url)
 		.then(function() {
@@ -35,7 +35,6 @@ describe("bit-docs-html-highlight-line", function() {
 		generate(docMap, {
 			html: {
 				dependencies: {
-					// "bit-docs-prettify": "^0.1.0",
 					"bit-docs-html-highlight-line": __dirname
 				}
 			},
@@ -45,14 +44,14 @@ describe("bit-docs-html-highlight-line", function() {
 			debug: true,
 			minifyBuild: false
 		}).then(function() {
-			open("temp/index.html",function(browser, close) {
+			open("index.html",function(browser, close) {
 				var doc = browser.window.document;
 
 				var lineCodes = doc.querySelectorAll('pre[data-line] code');
 				var collapseCodes = doc.querySelectorAll('pre[data-collapse] code');
 
 				assert.ok(lineCodes.length, "there are code blocks with data-line");
-				// assert.ok(collapseCodes.length, "there are code blocks with data-collapse");
+				assert.ok(collapseCodes.length, "there are code blocks with data-collapse");
 
 				close();
 				done();
