@@ -4,8 +4,9 @@
   "description": "Highlight a line in source code",
   "main": "index.js",
   "scripts": {
-    "preversion": "npm test",
     "test": "mocha test.js --reporter spec",
+    "postversion": "git push --tags && git push",
+    "preversion": "npm test",
     "release:pre": "npm version prerelease && npm publish --tag=pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
@@ -26,7 +27,8 @@
   },
   "homepage": "https://github.com/bit-docs/bit-docs-html-highlight-line#readme",
   "dependencies": {
-    "jquery": "^2.2.4"
+    "bit-docs-prettify": "^0.2.2-8",
+    "prismjs": "^1.11.0"
   },
   "devDependencies": {
     "bit-docs-generate-html": "^0.1.0",

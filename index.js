@@ -1,6 +1,44 @@
-var $ = require("jquery");
-var padding = 3;
+require("bit-docs-prettify");
 
+require("prismjs/plugins/line-highlight/prism-line-highlight");
+require("prismjs/plugins/line-highlight/prism-line-highlight.css");
+
+require("./prism-collapse");
+require("./prism-collapse.less");
+
+/**
+ * Get node for provided line number
+ * Copied from prism-line-numbers.js and modified to support nested spans
+ * Original version assumed all line number spans were inside .line-numbers-rows
+ * but now they may be may be nested inside collapsed sections
+ *
+ * @param {Element} element pre element
+ * @param {Number} number line number
+ * @return {Element|undefined}
+ */
+Prism.plugins.lineNumbers.getLine = function (element, number) {
+	if (element.tagName !== 'PRE' || !element.classList.contains('line-numbers')) {
+		return;
+	}
+
+	var lineNumberRows = element.querySelector('.line-numbers-rows');
+	var lineNumbers = lineNumberRows.querySelectorAll('span'); // added
+	var lineNumberStart = parseInt(element.getAttribute('data-start'), 10) || 1;
+	var lineNumberEnd = lineNumberStart + (lineNumbers.length - 1);
+
+	if (number < lineNumberStart) {
+		number = lineNumberStart;
+	}
+	if (number > lineNumberEnd) {
+		number = lineNumberEnd;
+	}
+
+	var lineIndex = number - lineNumberStart;
+
+	return lineNumbers[lineIndex];
+};
+
+var padding = 3;
 var getConfig = function(lineString, lineCount) {
 	var lines = lineString
 		.split(',')
@@ -47,21 +85,34 @@ var getConfig = function(lineString, lineCount) {
 	};
 };
 
-module.exports = function() {
-	$('span[line-highlight]').each(function(i, el) {
-		var $el = $(el);
-		var preBlock = $el.parent().prev('pre');
-		var codeBlock = preBlock.children('code');
+function findPrevious(el, tag) {
+	tag = tag.toUpperCase();
 
-		var total = codeBlock.text().split('\n').length - 1;
-		var config = getConfig($el.attr('line-highlight'), total);
+	while (el = el.previousSibling) {
+		if (el.tagName && el.tagName.toUpperCase() === tag) {
+			return el;
+		}
+	}
+}
+
+module.exports = function() {
+	var highlights = document.querySelectorAll('span[line-highlight]')
+
+	for (var i = 0; i < highlights.length; i++) {
+		var highlight = highlights[i];
+
+		var preBlock = findPrevious(highlight.parentElement, 'pre');
+		var codeBlock = preBlock.childNodes.item(0);
+
+		var total = codeBlock.innerHTML.split('\n').length - 1;
+		var config = getConfig(highlight.getAttribute('line-highlight'), total);
 
 		if (preBlock) {
-			preBlock.attr('data-line', config.lines);
+			preBlock.setAttribute('data-line', config.lines);
 
 			if (config.collapse) {
-				preBlock.attr('data-collapse', config.collapse);
+				preBlock.setAttribute('data-collapse', config.collapse);
 			}
 		}
-	});
+	};
 };
