@@ -4,9 +4,8 @@
   "description": "Highlight a line in source code",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js --reporter spec",
-    "postversion": "git push --tags && git push",
     "preversion": "npm test",
+    "test": "mocha test.js --reporter spec",
     "release:pre": "npm version prerelease && npm publish --tag=pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
