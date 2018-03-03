@@ -23,7 +23,7 @@ function adjustHighlights(pre, collapseRange, visible) {
 		if (range.length === 1) {
 			var line = range[0];
 			if (line < collapseRange[0]) {
-				return;
+				continue;
 			}
 
 			if (line > collapseRange[1]) {
@@ -32,16 +32,15 @@ function adjustHighlights(pre, collapseRange, visible) {
 					highlight.style.top = lineNode.offsetTop + 'px';
 				}
 
-				return;
+				continue;
 			}
 
 			highlight.style.display = visible ? 'block' : 'none';
-			return;
 		}
 
 		if (range.length === 2) {
 			if (range[1] < collapseRange[0]) {
-				return;
+				continue;
 			}
 
 			if (range[0] > collapseRange[1]) {
@@ -49,16 +48,16 @@ function adjustHighlights(pre, collapseRange, visible) {
 				if (lineNode) {
 					highlight.style.top = lineNode.offsetTop + 'px';
 				}
-				return;
+
+				continue;
 			}
 
 			highlight.style.display = visible ? 'block' : 'none';
-			return;
 		}
 	};
 }
 
-function collapseLines(pre, config, hasLineNumbers) {
+function collapseLines(pre, config) {
 	var inserts = [];
 
 	var ranges = config.split(',');
@@ -78,8 +77,6 @@ function collapseLines(pre, config, hasLineNumbers) {
 			'</div></div>',
 			'</div></div>'
 		]);
-
-		adjustHighlights(pre, range, false);
 	}
 
 	inserts.sort(function (a, b) {
@@ -89,14 +86,9 @@ function collapseLines(pre, config, hasLineNumbers) {
 
 	var codeContainer = pre.children[0];
 
-	var numbersContainer = null;
-	var numbers = null;
-	if (hasLineNumbers) {
-		numbersContainer = codeContainer.lastChild;
-		numbersContainer.remove();
-
-		numbers = numbersContainer.innerHTML.split('<span></span>');
-	}
+	var numbersContainer = codeContainer.lastChild;
+	var numbers = numbersContainer.innerHTML.split('<span></span>');
+	numbersContainer.remove();
 
 	var code = codeContainer.innerHTML.split('\n');
 	code = code.map(function(line, index) {
@@ -115,10 +107,12 @@ function collapseLines(pre, config, hasLineNumbers) {
 	}
 
 	codeContainer.innerHTML = code.join('');
+	numbersContainer.innerHTML = numbers.join('<span></span>');
+	codeContainer.appendChild(numbersContainer);
 
-	if (hasLineNumbers) {
-		numbersContainer.innerHTML = numbers.join('<span></span>');
-		codeContainer.appendChild(numbersContainer);
+	for (var i = 0; i < ranges.length; i++) {
+		var range = ranges[i];
+		adjustHighlights(pre, range, false);
 	}
 }
 
@@ -140,13 +134,12 @@ Prism.hooks.add('complete', function completeHook(env) {
 		return;
 	}
 
-	var hasLineNumbers = Prism.plugins.lineNumbers;
 	var isLineNumbersLoaded = env.plugins && env.plugins.lineNumbers;
 
-	if (hasClass(pre, 'line-numbers') && hasLineNumbers && !isLineNumbersLoaded) {
+	if (hasClass(pre, 'line-numbers') && !isLineNumbersLoaded) {
 		Prism.hooks.add('line-numbers', completeHook);
 	} else {
-		collapseLines(pre, config, hasLineNumbers);
+		collapseLines(pre, config);
 	}
 });
 
