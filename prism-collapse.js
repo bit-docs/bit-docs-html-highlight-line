@@ -13,8 +13,6 @@ function adjustHighlights(pre, collapseRange, visible) {
 	});
 
 	var highlights = pre.querySelectorAll('.line-highlight');
-	var lineHeight = getLineHeight(highlights);
-
 	for (var i = 0; i < highlights.length; i++) {
 		var highlight = highlights[i];
 
@@ -29,10 +27,11 @@ function adjustHighlights(pre, collapseRange, visible) {
 			}
 
 			if (line > collapseRange[1]) {
-				var top = parseFloat(highlight.style.top.slice(0, -2));
-				var offset = (collapseRange[1] - collapseRange[0]) * lineHeight;
+				var lineNode = Prism.plugins.lineNumbers.getLine(pre, line);
+				if (lineNode) {
+					line.style.top = lineNode.offsetTop + 'px';
+				}
 
-				highlight.style.top = top + (visible ? offset : -offset) + 'px';
 				return;
 			}
 
@@ -46,10 +45,10 @@ function adjustHighlights(pre, collapseRange, visible) {
 			}
 
 			if (range[0] > collapseRange[1]) {
-				var top = parseFloat(highlight.style.top.slice(0, -2));
-				var offset = (collapseRange[1] - collapseRange[0]) * lineHeight;
-
-				highlight.style.top = top + (visible ? offset : -offset) + 'px';
+				var lineNode = Prism.plugins.lineNumbers.getLine(pre, range[0]);
+				if (lineNode) {
+					line.style.top = lineNode.offsetTop + 'px';
+				}
 				return;
 			}
 
@@ -57,21 +56,6 @@ function adjustHighlights(pre, collapseRange, visible) {
 			return;
 		}
 	};
-
-	function getLineHeight(highlights) {
-		var highlight = highlights[0];
-		var height = parseFloat(highlight.style.height.slice(0, -2));
-
-		var range = highlight.getAttribute('data-range').split('-').map(function(value) {
-			return parseInt(value);
-		});
-
-		if (range.length === 1) {
-			return height;
-		}
-
-		return height / (range[1] - range[0] + 1);
-	}
 }
 
 function collapseLines(pre, config, hasLineNumbers) {
