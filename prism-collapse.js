@@ -29,7 +29,7 @@ function adjustHighlights(pre, collapseRange, visible) {
 			if (line > collapseRange[1]) {
 				var lineNode = Prism.plugins.lineNumbers.getLine(pre, line);
 				if (lineNode) {
-					line.style.top = lineNode.offsetTop + 'px';
+					highlight.style.top = lineNode.offsetTop + 'px';
 				}
 
 				return;
@@ -47,7 +47,7 @@ function adjustHighlights(pre, collapseRange, visible) {
 			if (range[0] > collapseRange[1]) {
 				var lineNode = Prism.plugins.lineNumbers.getLine(pre, range[0]);
 				if (lineNode) {
-					line.style.top = lineNode.offsetTop + 'px';
+					highlight.style.top = lineNode.offsetTop + 'px';
 				}
 				return;
 			}
