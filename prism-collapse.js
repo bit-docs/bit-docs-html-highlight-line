@@ -32,7 +32,7 @@ function adjustHighlights(pre, collapseRange, visible) {
 				var top = parseFloat(highlight.style.top.slice(0, -2));
 				var offset = (collapseRange[1] - collapseRange[0]) * lineHeight;
 
-				highlight.style.top = top + (visible ? offset : -offset);
+				highlight.style.top = top + (visible ? offset : -offset) + 'px';
 				return;
 			}
 
@@ -49,7 +49,7 @@ function adjustHighlights(pre, collapseRange, visible) {
 				var top = parseFloat(highlight.style.top.slice(0, -2));
 				var offset = (collapseRange[1] - collapseRange[0]) * lineHeight;
 
-				highlight.style.top = top + (visible ? offset : -offset);
+				highlight.style.top = top + (visible ? offset : -offset) + 'px';
 				return;
 			}
 
@@ -60,7 +60,7 @@ function adjustHighlights(pre, collapseRange, visible) {
 
 	function getLineHeight(highlights) {
 		var highlight = highlights[0];
-		var height = parseFloat(highlight.css('height').slice(0, -2));
+		var height = parseFloat(highlight.style.height.slice(0, -2));
 
 		var range = highlight.getAttribute('data-range').split('-').map(function(value) {
 			return parseInt(value);
@@ -138,6 +138,16 @@ function collapseLines(pre, config, hasLineNumbers) {
 	}
 }
 
+function findPreviousParent(el, tag) {
+	tag = tag.toUpperCase();
+
+	while (el = el.parentElement) {
+		if (el.tagName && el.tagName.toUpperCase() === tag) {
+			return el;
+		}
+	}
+}
+
 Prism.hooks.add('complete', function completeHook(env) {
 	var pre = env.element.parentNode;
 	var config = pre && pre.getAttribute('data-collapse');
@@ -163,11 +173,13 @@ document.body.addEventListener('click', function(event) {
 	}
 
 	var index = collapse.getAttribute('data-index');
-	var code = collapse.parentElement;
-	var pre = code.parentElement;
+	var code = findPreviousParent(collapse, 'code');
+	var pre = findPreviousParent(code, 'pre');
 
-	var line = code.querySelectorAll('.collapse[data-index=' + index + ']');
-	line.classList.remove('collapsed');
+	var lines = code.querySelectorAll('.collapse[data-index="' + index + '"]');
+	for (var i = 0; i < lines.length; i++) {
+		lines[i].classList.remove('collapsed');
+	}
 
 	adjustHighlights(pre, collapse.getAttribute('data-range'), true);
 }, false);

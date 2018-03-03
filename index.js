@@ -85,7 +85,7 @@ var getConfig = function(lineString, lineCount) {
 	};
 };
 
-function findPrevious(el, tag) {
+function findPreviousSibling(el, tag) {
 	tag = tag.toUpperCase();
 
 	while (el = el.previousSibling) {
@@ -101,7 +101,7 @@ module.exports = function() {
 	for (var i = 0; i < highlights.length; i++) {
 		var highlight = highlights[i];
 
-		var preBlock = findPrevious(highlight.parentElement, 'pre');
+		var preBlock = findPreviousSibling(highlight.parentElement, 'pre');
 		var codeBlock = preBlock.childNodes.item(0);
 
 		var total = codeBlock.innerHTML.split('\n').length - 1;
