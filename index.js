@@ -1,145 +1,118 @@
-require("./static/styles/highlight-line.less");
-var $ = require("jquery");
+require("bit-docs-prettify");
 
-var getLines = function(lineString) {
-	var lineArray = lineString.split(',');
-	var result = {};
+require("prismjs/plugins/line-highlight/prism-line-highlight");
+require("prismjs/plugins/line-highlight/prism-line-highlight.css");
 
-	for (var i = 0; i < lineArray.length; i++) {
-		var val = lineArray[i];
-
-		// Matches any string with 1+ digits dash 1+ digits
-		// will ignore non matching strings
-		if (/^([\d]+-[\d]+)$/.test(val)) {
-			var values = val.split('-'),
-				start = (values[0] - 1),
-				finish = (values[1] - 1);
-
-			for (var j = start; finish >= j; j++) {
-				result[j] = true;
-			}
-			//matches one or more digits
-		} else if (/^[\d]+$/.test(val)) {
-			result[val - 1] = true;
-		} else {
-			result[val] = true;
-		}
-
-	}
-	return result;
-};
+require("./prism-collapse");
+require("./prism-collapse.less");
 
 /**
- * @parent bit-docs-html-highlight-line/static
- * @module {function} bit-docs-html-highlight-line/highlight-line.js
- * 
- * Main front end JavaScript file for static portion of this plugin.
- * 
- * @signature `addHighlights()`
- * 
- * Goes through the lines in a `<code>` block and highlights the specified
- * ranges. 
- * 
- * Finds all `<span highlight-line="..."></span>` elements and uses those as
- * directives for what to highlight.
- * 
- * If the `only` option was specified to the
- * [bit-docs-html-highlight-line/tags/highlight] tag, then non-highlighted
- * lines will be collapsed if they exist greater than three lines away from a
- * highlighted line.
+ * Get node for provided line number
+ * Copied from prism-line-numbers.js and modified to support nested spans
+ * Original version assumed all line number spans were inside .line-numbers-rows
+ * but now they may be may be nested inside collapsed sections
+ *
+ * @param {Element} element pre element
+ * @param {Number} number line number
+ * @return {Element|undefined}
  */
-function addHighlights() {
+Prism.plugins.lineNumbers.getLine = function (element, number) {
+	if (element.tagName !== 'PRE' || !element.classList.contains('line-numbers')) {
+		return;
+	}
 
-	$('span[line-highlight]').each(function(i, el) {
-		var $el = $(el);
-		var lines = getLines($el.attr('line-highlight'));
-		var codeBlock = $el.parent().prev('pre').children('code');
-		codeBlock.addClass("line-highlight");
+	var lineNumberRows = element.querySelector('.line-numbers-rows');
+	var lineNumbers = lineNumberRows.querySelectorAll('span'); // added
+	var lineNumberStart = parseInt(element.getAttribute('data-start'), 10) || 1;
+	var lineNumberEnd = lineNumberStart + (lineNumbers.length - 1);
 
-		var lineMap = [[]];
-		var k = 0;
-		codeBlock.children().each(function(i, el) {
-			var nodeText = $(el).text();
-			if (/\n/.test(nodeText)) {
+	if (number < lineNumberStart) {
+		number = lineNumberStart;
+	}
+	if (number > lineNumberEnd) {
+		number = lineNumberEnd;
+	}
 
-				var cNames = $(el).attr('class');
-				var str = nodeText.split('\n');
-				var l = str.length;
+	var lineIndex = number - lineNumberStart;
 
-				for (var j = 0; j < l; j++) {
-					var text = j === (l - 1) ? str[j] : str[j] + '\n';
-					var newNode = document.createElement('span');
-					newNode.className = cNames;
-					$(newNode).text(text);
-					lineMap[k].push(newNode);
+	return lineNumbers[lineIndex];
+};
 
-					if (j !== (l - 1)) {
-						k++;
-						lineMap[k] = [];
-					}
-				}
-			} else {
-				lineMap[k].push(el);
+var padding = 3;
+var getConfig = function(lineString, lineCount) {
+	var lines = lineString
+		.split(',')
+		.map(function(data) {
+			return data.trim();
+		})
+		.filter(function(data) {
+			return data;
+		})
+	;
+
+	var collapse = [];
+	var index = lines.indexOf('only');
+	if (index > -1) {
+		lines.splice(index, 1);
+
+		var current = 1;
+		for (var i = 0; i < lines.length; i++) {
+			var range = lines[i]
+				.split('-')
+				.map(function(val) {
+					return parseInt(val);
+				})
+				.filter(function(val) {
+					return typeof val === 'number' && !isNaN(val);
+				})
+			;
+
+			if (range[0] > current + padding) {
+				collapse.push(current + '-' + (range[0] - 1 - padding));
 			}
-		});
 
-		codeBlock.empty();
-		if(lines.only) {
-			var segments = [];
-			lineMap.forEach(function(lineNodes, lineNumber){
-				var visible = lines[lineNumber];
-				var lineNode = document.createElement('span');
-				$(lineNode).append(lineNodes);
-				lineNode.className = lines[lineNumber] ? 'line highlight line-'+lineNumber: 'line line-'+lineNumber ;
-
-				var lastSegment = segments[segments.length - 1];
-				if(!lastSegment || lastSegment.visible !== visible) {
-					segments.push(lastSegment = {visible: visible, lines: []});
-				}
-				lastSegment.lines.push(lineNode);
-
-
-			});
-			segments.forEach(function(segment, index){
-				var next = segments[index+1];
-
-				if(segment.visible) {
-					// take 3 lines from next if possible
-					if(next) {
-						var first = next.lines.splice(0,3);
-						segment.lines = segment.lines.concat(first);
-					}
-					codeBlock.append(segment.lines);
-				} else {
-					// move 3 lines to next if possible
-					if(next) {
-						var last = segment.lines.splice(segment.lines.length-3);
-						next.lines = last.concat(next.lines);
-					}
-					if(segment.lines.length > 2) {
-						var expander = document.createElement('div');
-						expander.className = "expand";
-						expander.addEventListener("click", function(){
-							$(expander).replaceWith(segment.lines);
-						});
-						codeBlock.append(expander);
-					} else {
-						codeBlock.append(segment.lines);
-					}
-				}
-			});
-
-
-		} else {
-			lineMap.forEach(function(lineNodes, lineNumber){
-				var newNode = document.createElement('span');
-				newNode.className = lines[lineNumber] ? 'line highlight': 'line' ;
-				$(newNode).append(lineNodes);
-				codeBlock.append(newNode);
-			});
+			current = (range[1] || range[0]) + padding + 1;
 		}
 
-	});
+		if (current < lineCount) {
+			collapse.push(current + '-' + lineCount);
+		}
+	}
+
+	return {
+		lines: lines.length ? lines.join(',') : false,
+		collapse: collapse.length ? collapse.join(',') : false,
+	};
+};
+
+function findPreviousSibling(el, tag) {
+	tag = tag.toUpperCase();
+
+	while (el = el.previousSibling) {
+		if (el.tagName && el.tagName.toUpperCase() === tag) {
+			return el;
+		}
+	}
 }
 
-module.exports = addHighlights;
+module.exports = function() {
+	var highlights = document.querySelectorAll('span[line-highlight]')
+
+	for (var i = 0; i < highlights.length; i++) {
+		var highlight = highlights[i];
+
+		var preBlock = findPreviousSibling(highlight.parentElement, 'pre');
+		var codeBlock = preBlock.childNodes.item(0);
+
+		var total = codeBlock.innerHTML.split('\n').length - 1;
+		var config = getConfig(highlight.getAttribute('line-highlight'), total);
+
+		if (preBlock) {
+			preBlock.setAttribute('data-line', config.lines);
+
+			if (config.collapse) {
+				preBlock.setAttribute('data-collapse', config.collapse);
+			}
+		}
+	};
+};

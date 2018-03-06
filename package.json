@@ -6,6 +6,7 @@
   "scripts": {
     "preversion": "npm test",
     "test": "mocha test.js --reporter spec",
+    "release:pre": "npm version prerelease && npm publish --tag=pre",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish"
@@ -25,12 +26,13 @@
   },
   "homepage": "https://github.com/bit-docs/bit-docs-html-highlight-line#readme",
   "dependencies": {
-    "jquery": "^2.2.4"
+    "bit-docs-prettify": "^0.2.2-8",
+    "prismjs": "^1.11.0"
   },
   "devDependencies": {
     "bit-docs-generate-html": "^0.1.0",
     "connect": "^2.14.4",
     "mocha": "^2.5.3",
-    "zombie": "^4.2.1"
+    "zombie": "^4.3.0"
   }
 }
