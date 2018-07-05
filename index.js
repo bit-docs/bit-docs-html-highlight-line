@@ -85,14 +85,23 @@ var getConfig = function(lineString, lineCount) {
 	};
 };
 
-function findPreviousSibling(el, tag) {
+function findPreviousSibling(start, tag) {
 	tag = tag.toUpperCase();
 
-	while (el = el.previousSibling) {
-		if (el.tagName && el.tagName.toUpperCase() === tag) {
-			return el;
-		}
-	}
+	while(start) {
+        if(start.nodeName === tag) {
+            return start;
+        }
+        if(start.querySelector) {
+            var pre = start.querySelector(tag);
+            if(pre) {
+                return pre;
+            }
+        }
+
+        // needs to be previousSibling for zombie
+        start = start.previousSibling;
+    }
 }
 
 module.exports = function() {
