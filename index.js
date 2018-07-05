@@ -105,7 +105,7 @@ function findPreviousSibling(start, tag) {
 }
 
 module.exports = function() {
-	var highlights = document.querySelectorAll('span[line-highlight]')
+	var highlights = document.querySelectorAll('div[line-highlight]');
 
 	for (var i = 0; i < highlights.length; i++) {
 		var highlight = highlights[i];

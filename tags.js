@@ -38,7 +38,7 @@ exports.highlight = {
     add: function(line, curData) {
         var space = line.substr(0, line.indexOf("@highlight"));
         var lines = line.replace("@highlight","").trim();
-        var html = space+"<span line-highlight='"+lines+"'></span>";
+        var html = space+"<div line-highlight='"+lines+"'></div>";
         var validCurData =  (curData && curData.length !== 2);
         var useCurData = validCurData && (typeof curData.description === "string") && !curData.body;
 

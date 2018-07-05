@@ -101,7 +101,7 @@ Put the markup in a template.  Change the `HTML` tab to the following:
 
 </html>
 ```
-<span line-highlight='11,68,only'/>
+<div line-highlight='11,68,only'/>
 
 > NOTE: autofocus
 
@@ -112,7 +112,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({});
 document.body.appendChild(frag);
 ```
-<span line-highlight='1-3,only'/>
+<div line-highlight='1-3,only'/>
 
 ## Create the todos type and get items left working
 
@@ -149,7 +149,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todos: todos});
 document.body.appendChild(frag);
 ```
-<span line-highlight='1-25,28,only'/>
+<div line-highlight='1-25,28,only'/>
 
 Update `HTML` to:
 
@@ -215,7 +215,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='22-31,36,50,only'/>
+<div line-highlight='22-31,36,50,only'/>
 
 Note:
 
@@ -276,7 +276,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-<span line-highlight='1-15,37-43,46,only'/>
+<div line-highlight='1-15,37-43,46,only'/>
 
 Update `HTML` to:
 
@@ -342,7 +342,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='22,36,50,only'/>
+<div line-highlight='22,36,50,only'/>
 
 Note:
 
@@ -415,7 +415,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='23-24,28,only'/>
+<div line-highlight='23-24,28,only'/>
 
 TODO:
 
@@ -490,7 +490,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-<span line-highlight='46-59,only'/>
+<div line-highlight='46-59,only'/>
 
 Update `HTML` to:
 
@@ -563,7 +563,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='11-16,18,22,only'/>
+<div line-highlight='11-16,18,22,only'/>
 
 ## List todos
 
@@ -643,7 +643,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-<span line-highlight='60-68,only'/>
+<div line-highlight='60-68,only'/>
 
 Update `HTML` to:
 
@@ -720,7 +720,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='18-32,43,only'/>
+<div line-highlight='18-32,43,only'/>
 
 
 ## Edit todos
@@ -818,7 +818,7 @@ var template = can.stache.from("todomvc-template");
 var frag = template({todosPromise: Todo.getList({})});
 document.body.appendChild(frag);
 ```
-<span line-highlight='62-78,only'/>
+<div line-highlight='62-78,only'/>
 
 
 
@@ -902,7 +902,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='23,26,29-32,only'/>
+<div line-highlight='23,26,29-32,only'/>
 
 ## Routing
 
@@ -1020,7 +1020,7 @@ can.route.ready();
 var frag = template(vm);
 document.body.appendChild(frag);
 ```
-<span line-highlight='87-109,only'/>
+<div line-highlight='87-109,only'/>
 
 Update `HTML` to:
 
@@ -1104,7 +1104,7 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='55-56,59-60,63-64,only'/>
+<div line-highlight='55-56,59-60,63-64,only'/>
 
 
 ## Check all and clear completed
@@ -1259,7 +1259,7 @@ can.route.ready();
 var frag = template(vm);
 document.body.appendChild(frag);
 ```
-<span line-highlight='40-57,128-135,only'/>
+<div line-highlight='40-57,128-135,only'/>
 
 Update `HTML` to:
 
@@ -1346,4 +1346,4 @@ Update `HTML` to:
 
 </html>
 ```
-<span line-highlight='45-47,69-70,only'/>
+<div line-highlight='45-47,69-70,only'/>
