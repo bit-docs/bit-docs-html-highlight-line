@@ -110,7 +110,7 @@ module.exports = function() {
 	for (var i = 0; i < highlights.length; i++) {
 		var highlight = highlights[i];
 
-		var preBlock = findPreviousSibling(highlight.parentElement, 'pre');
+		var preBlock = findPreviousSibling(highlight, 'pre');
 		var codeBlock = preBlock.childNodes.item(0);
 
 		var total = codeBlock.innerHTML.split('\n').length - 1;
