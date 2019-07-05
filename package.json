@@ -30,7 +30,7 @@
     "prismjs": "^1.11.0"
   },
   "devDependencies": {
-    "bit-docs-generate-html": "^0.1.0",
+    "bit-docs-generate-html": "^0.15.0",
     "connect": "^2.14.4",
     "mocha": "^2.5.3",
     "zombie": "^4.3.0"
