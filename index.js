@@ -66,11 +66,14 @@ var getConfig = function(lineString, lineCount) {
 					return typeof val === 'number' && !isNaN(val);
 				})
 			;
-
+			
 			if (range[0] > current + padding) {
-				collapse.push(current + '-' + (range[0] - 1 - padding));
+				var collapseEnd = (range[0] - 1 - padding);
+				if (collapseEnd !== current) {
+					collapse.push(current + '-' + collapseEnd);
+				}
 			}
-
+			
 			current = (range[1] || range[0]) + padding + 1;
 		}
 
