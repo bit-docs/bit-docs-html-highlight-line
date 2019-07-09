@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preversion": "npm test",
+    "postpublish": "git push --tags && git push",
     "test": "mocha test.js --reporter spec",
     "release:pre": "npm version prerelease && npm publish --tag=pre",
     "release:patch": "npm version patch && npm publish",
