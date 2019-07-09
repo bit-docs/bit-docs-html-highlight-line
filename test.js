@@ -58,4 +58,38 @@ describe("bit-docs-html-highlight-line", function() {
 			}, done);
 		}, done);
 	});
+
+	it("dosen't show expand button for one line code", function(done) {
+		this.timeout(60000);
+
+		var docMap = Promise.resolve({
+			index: {
+				name: "index",
+				demo: "path/to/demo.html",
+				body: fs.readFileSync(__dirname+"/collapse-test.md", "utf8")
+			}
+		});
+
+		generate(docMap, {
+			html: {
+				dependencies: {
+					"bit-docs-html-highlight-line": __dirname
+				}
+			},
+			dest: path.join(__dirname, "temp"),
+			parent: "index",
+			forceBuild: true,
+			debug: true,
+			minifyBuild: false
+		}).then(function() {
+			open("index.html",function(browser, close) {
+				var doc = browser.window.document;
+				var collapseCodes = doc.querySelectorAll('pre[data-collapse] code');
+				assert.equal(collapseCodes.length, 0);
+				close();
+				done();
+			}, done);
+		}, done)
+
+	});
 });
