@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/bit-docs/bit-docs-html-highlight-line#readme",
   "dependencies": {
-    "bit-docs-prettify": "^0.2.2-8",
+    "bit-docs-prettify": "<2.0.0",
     "prismjs": "^1.11.0"
   },
   "devDependencies": {

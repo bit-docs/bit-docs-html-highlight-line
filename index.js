@@ -88,23 +88,32 @@ var getConfig = function(lineString, lineCount) {
 	};
 };
 
-function findPreviousSibling(el, tag) {
+function findPreviousSibling(start, tag) {
 	tag = tag.toUpperCase();
 
-	while (el = el.previousSibling) {
-		if (el.tagName && el.tagName.toUpperCase() === tag) {
-			return el;
-		}
-	}
+	while(start) {
+        if(start.nodeName === tag) {
+            return start;
+        }
+        if(start.querySelector) {
+            var pre = start.querySelector(tag);
+            if(pre) {
+                return pre;
+            }
+        }
+
+        // needs to be previousSibling for zombie
+        start = start.previousSibling;
+    }
 }
 
 module.exports = function() {
-	var highlights = document.querySelectorAll('span[line-highlight]')
+	var highlights = document.querySelectorAll('div[line-highlight]');
 
 	for (var i = 0; i < highlights.length; i++) {
 		var highlight = highlights[i];
 
-		var preBlock = findPreviousSibling(highlight.parentElement, 'pre');
+		var preBlock = findPreviousSibling(highlight, 'pre');
 		var codeBlock = preBlock.childNodes.item(0);
 
 		var total = codeBlock.innerHTML.split('\n').length - 1;
