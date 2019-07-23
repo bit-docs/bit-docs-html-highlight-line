@@ -93,7 +93,7 @@ describe("bit-docs-html-highlight-line", function() {
 
 	});
 
-	it("Collappse last line", function(done) {
+	it.only("Collapse last line", function(done) {
 		this.timeout(60000);
 
 		var docMap = Promise.resolve({
@@ -118,12 +118,11 @@ describe("bit-docs-html-highlight-line", function() {
 		}).then(function() {
 			open("index.html",function(browser, close) {
 				var doc = browser.window.document;
-				var collapseCodes = doc.querySelectorAll('pre[data-collapse]');
-				console.log(collapseCodes);
-				assert.ok(collapseCodes);
+				var collapseCodes = doc.querySelectorAll('pre[data-collapse="1-93,104-106"]');
+				assert.equal(collapseCodes.length,1);
 				close();
 				done();
 			}, done);
 		}, done);
-	})
+	});
 });
