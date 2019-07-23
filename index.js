@@ -109,7 +109,7 @@ module.exports = function() {
 		//Without trimming, additional characters can create new lines
 		//this happens when PrismJS is not applied (in testing)
 		//setting total to length - 1 makes the last not collapsed
-		var total = codeBlock.innerHTML.trim().split('\n').length;
+		var total = codeBlock.innerHTML.split('\n').length;
 		var config = getConfig(highlight.getAttribute('line-highlight'), total);
 
 		if (preBlock) {
