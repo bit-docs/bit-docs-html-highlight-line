@@ -118,9 +118,9 @@ describe("bit-docs-html-highlight-line", function() {
 		}).then(function() {
 			open("index.html",function(browser, close) {
 				var doc = browser.window.document;
-				var collapseCode = doc.querySelector('pre[data-collapse="1-93,104-106"]');
-				console.log(collapseCode);
-				assert.ok(collapseCode);
+				var collapseCodes = doc.querySelectorAll('pre[data-collapse]');
+				console.log(collapseCodes);
+				assert.ok(collapseCodes);
 				close();
 				done();
 			}, done);
