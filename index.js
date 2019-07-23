@@ -66,14 +66,14 @@ var getConfig = function(lineString, lineCount) {
 					return typeof val === 'number' && !isNaN(val);
 				})
 			;
-			
+
 			if (range[0] > current + padding) {
 				var collapseEnd = (range[0] - 1 - padding);
 				if (collapseEnd !== current) {
 					collapse.push(current + '-' + collapseEnd);
 				}
 			}
-			
+
 			current = (range[1] || range[0]) + padding + 1;
 		}
 
@@ -109,7 +109,9 @@ module.exports = function() {
 		//Without trimming, additional characters can create new lines
 		//this happens when PrismJS is not applied (in testing)
 		//setting total to length - 1 makes the last not collapsed
-		codeBlock.textContent = codeBlock.textContent.trim();
+		if (codeBlock.textContent.slice(-1) === "\n") {
+			codeBlock.textContent = codeBlock.textContent.slice(0, -1);
+		}
 		var total = codeBlock.innerHTML.split('\n').length;
 		var config = getConfig(highlight.getAttribute('line-highlight'), total);
 
