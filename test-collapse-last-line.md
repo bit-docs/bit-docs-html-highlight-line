@@ -1,5 +1,3 @@
-You can also set the `value` of the properties of `pageComponentViewModel` and verify that the `routeData` is updated correctly:
-
 ```html
 <div id="mocha"></div>
 <link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
