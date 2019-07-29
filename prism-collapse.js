@@ -100,7 +100,7 @@ function collapseLines(pre, config) {
 	});
 
 	for (var i = 0; i < inserts.length; i++) {
-		var line = Math.min(code.length - 1, inserts[i][0] - 1);
+		var line = Math.min(code.length, inserts[i][0] - 1);
 
 		code.splice(line, 0, inserts[i][1]);
 		numbers[line] += inserts[i][2];

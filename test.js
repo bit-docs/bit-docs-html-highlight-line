@@ -89,7 +89,40 @@ describe("bit-docs-html-highlight-line", function() {
 				close();
 				done();
 			}, done);
-		}, done)
+		}, done);
 
+	});
+
+	it("Collapse last line", function(done) {
+		this.timeout(60000);
+
+		var docMap = Promise.resolve({
+			index: {
+				name: "index",
+				demo: "path/to/demo.html",
+				body: fs.readFileSync(__dirname+"/test-collapse-last-line.md", "utf8")
+			}
+		});
+
+		generate(docMap, {
+			html: {
+				dependencies: {
+					"bit-docs-html-highlight-line": __dirname
+				}
+			},
+			dest: path.join(__dirname, "temp"),
+			parent: "index",
+			forceBuild: true,
+			debug: true,
+			minifyBuild: false
+		}).then(function() {
+			open("index.html",function(browser, close) {
+				var doc = browser.window.document;
+				var collapseCode = doc.querySelectorAll('pre[data-collapse="11-12"]');
+				assert.ok(collapseCode);
+				close();
+				done();
+			}, done);
+		}, done);
 	});
 });
