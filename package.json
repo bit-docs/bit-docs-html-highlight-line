@@ -28,7 +28,8 @@
   "homepage": "https://github.com/bit-docs/bit-docs-html-highlight-line#readme",
   "dependencies": {
     "bit-docs-prettify": "<2.0.0",
-    "prismjs": "^1.11.0"
+    "clipboard": "^2.0.6",
+    "prismjs": "^1.22.0"
   },
   "devDependencies": {
     "bit-docs-generate-html": "^0.15.0",
